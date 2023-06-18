@@ -25,4 +25,6 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/users/store', [UserController::class, 'store']);
     Route::put('/users/{user}', [UserController::class, 'update']);
     Route::delete('/users/{user}', [UserController::class, 'destroy']);
+    Route::post('/notifications', 'UserController@sendNotification');
 });
+

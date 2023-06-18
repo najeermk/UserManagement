@@ -14,20 +14,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()-paginate()->get();
+        $users = User::all();
         return response()->json([
             'users' => $users
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -56,28 +46,6 @@ class UserController extends Controller
             'message' => 'User created successfully',
             'user' => $user
         ]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -121,5 +89,17 @@ class UserController extends Controller
         return response()->json([
             'message' => 'User has been deleted'
         ]);
+    }
+
+    public function sendNotification(Request $request)
+    {
+        $recipientId = $request->input('recipient_id');
+        $notificationContent = $request->input('content');
+
+        $user = User::findOrFail($recipientId);
+
+        $user->notify(new CustomNotification($notificationContent));
+
+        return response()->json(['message' => 'Notification sent successfully']);
     }
 }
